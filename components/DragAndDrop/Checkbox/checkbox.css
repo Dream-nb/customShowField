@@ -1,0 +1,11 @@
+.checkbox{
+    float: left;
+    width: 600px;
+    height: 100%;
+    border-right: 1px solid #ccc;
+    padding-left: 11px;
+  }
+.title{
+  padding-top: 7px;
+  padding-bottom: 15px;
+}

@@ -1,0 +1,23 @@
+.itemKey{
+    color:#000;
+    line-height: 26px;
+    height: 26px;
+  }
+  .delete{
+    float: right;
+    margin-right: 10px;
+    margin-top: -3px;
+    font-size: 18px;
+  }
+  .delete::after{
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .delete:hover{
+    cursor: pointer;
+  }
+  .itemKey:hover{
+    cursor:move; 
+    background-color: #eaf2ff;
+  }

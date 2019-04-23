@@ -1,0 +1,12 @@
+.customsort{
+  float: left;
+  width: 185px;
+  margin-left: 18px;
+  height: 100%;
+  overflow:hidden;
+  overflow-y: auto;
+}
+.title{
+  padding-top: 7px;
+  padding-bottom: 15px;
+}
