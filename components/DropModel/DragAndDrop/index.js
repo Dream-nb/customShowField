@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import CustomSort from "./CustomSort";
 import Checkboxs from './Checkbox';
-import {Spin} from 'antd'
+import {Spin,message} from 'antd'
 import './index.css'
 class DragAndDrop extends Component {
   constructor(props){
@@ -14,7 +14,7 @@ class DragAndDrop extends Component {
     this.handleSetState = this.handleSetState.bind(this);
   }
   move = (from, to)=>{
-    // console.log('from',from,to);
+    if(from === "操作"){ message.warning('操作栏不可移动'); return ;}
     const {handleSetShowColumns} = this.props;
     const { showColumns } = this.state;
     // find items
@@ -100,14 +100,13 @@ class DragAndDrop extends Component {
   //   }
   // }
   render() {
-    let { showColumns,allColumns } = this.props;
-    // console.log('this@@@@@QQ',this);
+    let { showColumns,allColumns,disabled } = this.props;
     if(showColumns.type === undefined){
       return <div><Spin size="large" /></div>
     }else{
       return <div className="wrap">
-      <Checkboxs allColumns={allColumns} showColumns={showColumns} handleSetState = {this.handleSetState} />
-      <CustomSort allColumns={allColumns}  showColumns={showColumns} move={this.move.bind(this)}  handleSetState = {this.handleSetState}/>
+      <Checkboxs allColumns={allColumns} disabled={disabled} showColumns={showColumns} handleSetState = {this.handleSetState} />
+      <CustomSort allColumns={allColumns} disabled={disabled}  showColumns={showColumns} move={this.move.bind(this)}  handleSetState = {this.handleSetState}/>
     </div>
     }
     

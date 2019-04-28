@@ -1,73 +1,97 @@
-import React, { Component } from 'react';
-import dataStore from '../Common/dataStores';
-import DropModel from './DropModels.js';
-import {Button, Table} from 'antd';
+import React from 'react';
+import { Modal, Button } from 'antd';
+import DragAndDrop from './DragAndDrop';
 
-class Index extends Component {
+class DropModel extends React.Component{
   constructor(props){
     super(props)
     this.state={
-      showColumns:[...(dataStore.columns)],
-      allColumns: [...dataStore.newColumns],
-      dropShowModel: false,
+      showColumns:[],
+      allColumns:[],
+      disabled : false //判断是否有操作栏
     }
-    this.handleOnClick = this.handleOnClick.bind(this);
-    this.handleModelOk = this.handleModelOk.bind(this);
-    this.handleModelCancel= this.handleModelCancel.bind(this);
+    this.handleOk = this.handleOk.bind(this);
+    this.handleCancel= this.handleCancel.bind(this);
+    this.handleSetShowColumns = this.handleSetShowColumns.bind(this);
   }
   componentDidMount(){
-    let showColumns = [...(dataStore.columns)];
-    let allColumns = [...dataStore.newColumns]
+    const {showColumns,allColumns} = this.props; 
+    let arr = [];
+    let arr1 =[];
+    let disabled =false ;
+    showColumns.map((item)=>{
+      if(item.title === "操作"){
+        disabled = true;
+      }
+      arr.push({
+        ...item,
+        defaultChecked:true,
+        type:'ITEM'
+      })
+    })
+    allColumns.map((item)=>{
+      arr1.push({
+        ...item,
+        defaultChecked:false,
+        type:'ITEM'
+      })
+    })
+    this.setState({
+      showColumns:{
+        type: 'BOX',
+        bool: false,
+        items: arr
+      },
+      allColumns:{
+        type: 'BOX',
+        items: arr1
+      },
+      disabled,
+    })
+  }
+  handleOk(){
+    const  {handleModelOk} = this.props;
+    let {showColumns} = this.state;
+    let copyShowColumns = [];
+    copyShowColumns = showColumns.items.map((item)=>{
+      return {
+        ...item
+      }
+    })
+    let columns = copyShowColumns.map((item)=>{
+      delete item.defaultChecked
+      delete item.type
+      return item
+    })
+    handleModelOk(columns);
+  }
+  handleCancel(){
+    const {handleModelCancel} = this.props;
+    handleModelCancel()
+  }
+  handleSetShowColumns(showColumns){
     this.setState({
       showColumns,
-      allColumns,
-    })
-    // console.log('layout###',layout);
-    // console.log('newlayoutt###',newlayout);
-  }
-  handleOnClick(){
-    this.setState({
-      dropShowModel: true
     })
   }
-  handleModelOk(columns){
-    this.setState({
-      dropShowModel: false,
-      showColumns: columns
-    })
-  }
-  handleModelCancel(){
-    this.setState({dropShowModel:false})
-  }
-  render() {
-    // console.log('this',this);
-    const {showColumns,allColumns,dropShowModel} = this.state;
-    if(showColumns.length===0 || allColumns.length ===0 ) {
-      return <div/>
-    }else{
+  render(){
+      const {dropShowModel} = this.props;
+      const {showColumns,allColumns,disabled} = this.state;
       return <div>
-      <DropModel
-        dropShowModel={dropShowModel}
-        showColumns={showColumns}
-        allColumns={allColumns}
-        handleModelOk={this.handleModelOk}
-        handleModelCancel={this.handleModelCancel}
-      />
-      <Button
-        onClick = {this.handleOnClick}
+      <Modal
+        title="设置显示字段"
+        visible={dropShowModel}
+        onOk={this.handleOk}
+        onCancel={this.handleCancel}
+        width= {"840px"}
+        maskStyle={{backgroundColor: "rgba(255,255,255,0.7)"}}
+        maskClosable={false}
+        bodyStyle={{padding:" 0 12px"}}
       >
-        巴啦啦能量~变身！！
-      </Button>
-      <div>
-        <Table
-          dataSource={[]}
-          columns={showColumns}
-          style={{ margin: '24px 0' }}
-        />
-      </div>
-      </div>
-    }
-    
+        <DragAndDrop showColumns={showColumns} disabled={disabled} allColumns={allColumns} handleSetShowColumns={this.handleSetShowColumns}/>
+      </Modal>
+    </div>
   }
 }
-export default Index
+
+export default DropModel

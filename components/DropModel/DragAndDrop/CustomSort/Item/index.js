@@ -69,7 +69,10 @@ class _Item extends Component {
                 <Icon style={{width:'6px'}}  type="more"/>
                 <Icon  type="more"/>
                 <span style={{marginLeft: "10px"}}>{title}</span>
-                <span onClick={this.handleOnClick.bind(this,title)} className="delete">×</span>
+                {
+                  title === "操作"?null:<span onClick={this.handleOnClick.bind(this,title)} className="delete">×</span>
+                }
+                
               </div>
             )
         )

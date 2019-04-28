@@ -38,9 +38,10 @@ class CheckBoxs extends Component {
   }
   handleOnChange =(e)=>{
     let {allColumns=[],showColumns=[]}=this.state;
-    const {handleSetState} = this.props;
+    const {handleSetState,disabled} = this.props;
     let current = [];
     let index = [];
+    let length = showColumns.items.length;
     allColumns.items.map((item,i)=>{
       if(item.title === e.target.value){
         item.defaultChecked = !item.defaultChecked;
@@ -56,10 +57,17 @@ class CheckBoxs extends Component {
       }
     });
     if(dataArr.length === 0){
-      showColumns.items.push({
-        ...current[0],
-        defaultChecked: true
-      })
+      if(disabled){
+        showColumns.items.splice(length-1,0,{
+          ...current[0],
+          defaultChecked: true
+        })
+      }else{
+        showColumns.items.push({
+          ...current[0],
+          defaultChecked: true
+        })
+      }
       showColumns.bool = !showColumns.bool
     }else{
       showColumns.items.splice(+index[0],1);
@@ -85,7 +93,7 @@ class CheckBoxs extends Component {
         <Row>
         {
           allColumns.items.map((newItem,id)=>{
-            return <Col span={6} key={id}> <Checkbox  value={newItem.title} checked={newItem.defaultChecked}  key={id} onChange={this.handleOnChange}>
+            return <Col span={6} key={id}> <Checkbox disabled={newItem.title==="操作"?true:false}  value={newItem.title} checked={newItem.defaultChecked}  key={id} onChange={this.handleOnChange}>
               {newItem.title}
             </Checkbox> </Col>
           })
