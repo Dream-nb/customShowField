@@ -41,7 +41,6 @@ class Index extends Component {
   }
   render() {
     const {showColumns,allColumns,dropShowModel} = this.state;
-    console.log('showColumns',this.state);
     if(showColumns.length===0 || allColumns.length ===0 ) {
       return <div/>
     }else{
